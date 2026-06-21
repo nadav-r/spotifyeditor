@@ -299,7 +299,7 @@ async function loadPlaylists() {
     let url = '/me/playlists?limit=50';
     while (url) {
       const d = await api(url);
-      allPlaylists.push(...d.items.filter(i => i && i.tracks));
+      const items = (d.items || []).filter(i => i && i.id && i.name); items.forEach(i => { if (!i.tracks) i.tracks = { total: 0 }; }); allPlaylists.push(...items);
       url = d.next ? d.next.replace('https://api.spotify.com/v1','') : null;
     }
     renderPlaylists(allPlaylists);
